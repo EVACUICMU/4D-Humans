@@ -176,10 +176,25 @@ cs.store(name="config", node=Human4DConfig)
 @hydra.main(version_base="1.2", config_name="config")
 def main(cfg: DictConfig) -> Optional[float]:
     """Main function for running the PHALP tracker."""
-
+    
     phalp_tracker = HMR2_4dhuman(cfg)
+    
+    total_frames = phalp_tracker.get_total_frames()  # You need to implement this method to get the number of frames
+    print('start')
+    start_time = time.time()
 
     phalp_tracker.track()
+    
+    end_time = time.time()
+    total_time = end_time - start_time
+    print('end')
+    if total_time > 0:
+        average_fps = total_frames / total_time
+        print(f"Total Frames: {total_frames}")
+        print(f"Total Time: {total_time:.2f} seconds")
+        print(f"Average FPS: {average_fps:.2f}")
+    else:
+        print("No frames were processed.")
 
 if __name__ == "__main__":
     main()
