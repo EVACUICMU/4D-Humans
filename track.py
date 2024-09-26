@@ -2,7 +2,6 @@ import warnings
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Tuple
-import time
 
 import os
 import hydra
@@ -163,46 +162,7 @@ class HMR2_4dhuman(PHALP):
             pred_bbox, pred_bbox_padded, pred_masks, pred_scores, pred_classes,
             ground_truth_track_id, ground_truth_annotations
         )
-    def track(self):
-        total_frames = 0
-        total_time = 0
-
-        # Assuming self.dataloader is the DataLoader for video frames
-        for idx, data in enumerate(self.dataloader):
-            start_time = time.time()
-
-            # Process the frame
-            outputs = self.process_frame(data)
-
-            end_time = time.time()
-            frame_time = end_time - start_time
-            total_time += frame_time
-            total_frames += 1
-
-            # Rest of your tracking code (e.g., updating trackers, saving outputs)
-
-        if total_time > 0:
-            average_fps = total_frames / total_time
-            print(f"Total Frames: {total_frames}")
-            print(f"Total Time: {total_time:.2f} seconds")
-            print(f"Average FPS: {average_fps:.2f}")
-        else:
-            print("No frames were processed.")
-    def process_frame(self, data):
-        # Process the frame data
-        # This should include all operations performed on each frame
-        # For example:
-
-        # Get detections
-        detections = self.get_detections(data)
-
-        # Update trackers
-        self.update_trackers(detections)
-
-        # Any other processing steps...
-
-        # Return outputs if needed
-        return detections
+    
 
 @dataclass
 class Human4DConfig(FullConfig):
@@ -216,7 +176,6 @@ cs.store(name="config", node=Human4DConfig)
 @hydra.main(version_base="1.2", config_name="config")
 def main(cfg: DictConfig) -> Optional[float]:
     """Main function for running the PHALP tracker."""
-
 
     phalp_tracker = HMR2_4dhuman(cfg)
 
